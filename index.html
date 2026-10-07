@@ -1,0 +1,1706 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+
+    <!-- Responsividade para celulares -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ObraFácil - Gestão de Obras</title>
+
+    <style>
+
+        /* =====================================================
+           CONFIGURAÇÕES GERAIS
+           ===================================================== */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f2f4f7;
+            color: #222;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 430px;
+            margin: 0 auto;
+            padding: 20px 15px;
+        }
+
+
+        /* =====================================================
+           CABEÇALHO
+           ===================================================== */
+
+        header {
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            font-size: 26px;
+            margin-bottom: 5px;
+        }
+
+        header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+
+        /* =====================================================
+           SELETOR DE PERFIL
+           ===================================================== */
+
+        .perfil {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .perfil button {
+            flex: 1;
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .perfil button.ativo {
+            background: #222;
+            color: white;
+            border-color: #222;
+        }
+
+
+        /* =====================================================
+           DASHBOARD
+           ===================================================== */
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 18px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .card h3 {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .card .valor {
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        .status {
+            color: #16803c;
+        }
+
+
+        /* =====================================================
+           BARRA DE PROGRESSO
+           ===================================================== */
+
+        .progresso-container {
+            background: white;
+            padding: 18px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .progresso-topo {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .barra {
+            width: 100%;
+            height: 12px;
+            background: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .barra-progresso {
+            height: 100%;
+            width: 65%;
+            background: #222;
+            border-radius: 10px;
+            transition: width 0.3s;
+        }
+
+
+        /* =====================================================
+           SEÇÕES
+           ===================================================== */
+
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+
+        /* =====================================================
+           FORMULÁRIOS
+           ===================================================== */
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #333;
+        }
+
+
+        /* =====================================================
+           BOTÕES
+           ===================================================== */
+
+        button {
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-principal {
+            width: 100%;
+            padding: 12px;
+            background: #222;
+            color: white;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .btn-principal:hover {
+            background: #000;
+        }
+
+        .btn-exportar {
+            width: 100%;
+            padding: 12px;
+            background: #16803c;
+            color: white;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+
+        /* =====================================================
+           ETAPAS DA OBRA
+           ===================================================== */
+
+        .etapa {
+            border: 1px solid #ddd;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .etapa-topo {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .etapa strong {
+            font-size: 15px;
+        }
+
+        .etapa small {
+            display: block;
+            color: #777;
+            margin-top: 5px;
+        }
+
+        .badge {
+            padding: 4px 7px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #eee;
+        }
+
+        .concluida {
+            background: #dff5e7;
+            color: #16803c;
+        }
+
+        .andamento {
+            background: #fff1cc;
+            color: #946c00;
+        }
+
+        .atrasada {
+            background: #ffe0e0;
+            color: #c62828;
+        }
+
+
+        /* =====================================================
+           MATERIAIS
+           ===================================================== */
+
+        .material {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .material-info strong {
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        .material-info small {
+            color: #777;
+        }
+
+        .material-status {
+            font-size: 11px;
+            font-weight: bold;
+            padding: 5px 7px;
+            border-radius: 5px;
+            background: #eee;
+        }
+
+
+        /* =====================================================
+           ATUALIZAÇÕES
+           ===================================================== */
+
+        .atualizacao {
+            border-left: 3px solid #222;
+            padding-left: 12px;
+            margin-bottom: 15px;
+        }
+
+        .atualizacao strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .atualizacao small {
+            color: #777;
+        }
+
+        .atualizacao p {
+            margin-top: 6px;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+
+        /* =====================================================
+           VISIBILIDADE
+           ===================================================== */
+
+        .somente-funcionario {
+            display: block;
+        }
+
+        .somente-cliente {
+            display: none;
+        }
+
+
+        /* =====================================================
+           RESPONSIVIDADE PARA DESKTOP
+           ===================================================== */
+
+        @media (min-width: 700px) {
+
+            body {
+                padding: 30px 0;
+            }
+
+            .container {
+                max-width: 850px;
+            }
+
+            .dashboard {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .form-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
+            }
+
+            .form-grid .form-group {
+                margin-bottom: 0;
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+    <main class="container">
+
+        <!-- =====================================================
+             CABEÇALHO
+             ===================================================== -->
+
+        <header>
+            <h1>ObraFácil</h1>
+            <p>Gestão e acompanhamento de obras</p>
+        </header>
+
+
+        <!-- =====================================================
+             SELEÇÃO DE PERFIL
+             ===================================================== -->
+
+        <div class="perfil">
+
+            <button
+                id="btnFuncionario"
+                class="ativo"
+                onclick="mostrarFuncionario()">
+                Funcionário
+            </button>
+
+            <button
+                id="btnCliente"
+                onclick="mostrarCliente()">
+                Cliente
+            </button>
+
+        </div>
+
+
+        <!-- =====================================================
+             DASHBOARD
+             ===================================================== -->
+
+        <section class="dashboard">
+
+            <div class="card">
+                <h3>Obra</h3>
+                <div class="valor">
+                    Reforma Residencial
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Status</h3>
+                <div class="valor status" id="statusObra">
+                    Em andamento
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Prazo</h3>
+                <div class="valor">
+                    15/12/2026
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             PROGRESSO DA OBRA
+             ===================================================== -->
+
+        <section class="progresso-container">
+
+            <div class="progresso-topo">
+
+                <strong>Progresso da obra</strong>
+
+                <strong id="porcentagem">
+                    65%
+                </strong>
+
+            </div>
+
+            <div class="barra">
+
+                <div
+                    class="barra-progresso"
+                    id="barraProgresso">
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             ÁREA DO FUNCIONÁRIO
+             ===================================================== -->
+
+        <div id="areaFuncionario"
+             class="somente-funcionario">
+
+
+            <!-- =================================================
+                 ATUALIZAR OBRA
+                 ================================================= -->
+
+            <section class="section">
+
+                <h2>Atualizar obra</h2>
+
+                <form id="formAtualizacao">
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+
+                            <label>
+                                Percentual de conclusão
+                            </label>
+
+                            <input
+                                type="number"
+                                id="progressoInput"
+                                min="0"
+                                max="100"
+                                value="65"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Status da obra
+                            </label>
+
+                            <select id="statusInput">
+
+                                <option>
+                                    Não iniciada
+                                </option>
+
+                                <option selected>
+                                    Em andamento
+                                </option>
+
+                                <option>
+                                    Concluída
+                                </option>
+
+                                <option>
+                                    Atrasada
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                    <br>
+
+                    <button
+                        type="submit"
+                        class="btn-principal">
+
+                        Atualizar informações
+
+                    </button>
+
+                </form>
+
+            </section>
+
+
+            <!-- =================================================
+                 ETAPAS
+                 ================================================= -->
+
+            <section class="section">
+
+                <h2>Etapas da obra</h2>
+
+                <div id="listaEtapas">
+
+                    <div class="etapa">
+
+                        <div class="etapa-topo">
+
+                            <strong>
+                                Fundação
+                            </strong>
+
+                            <span class="badge concluida">
+                                Concluída
+                            </span>
+
+                        </div>
+
+                        <small>
+                            Finalizada em 20/10/2026
+                        </small>
+
+                    </div>
+
+
+                    <div class="etapa">
+
+                        <div class="etapa-topo">
+
+                            <strong>
+                                Instalação elétrica
+                            </strong>
+
+                            <span class="badge andamento">
+                                Em andamento
+                            </span>
+
+                        </div>
+
+                        <small>
+                            Previsão: 05/11/2026
+                        </small>
+
+                    </div>
+
+
+                    <div class="etapa">
+
+                        <div class="etapa-topo">
+
+                            <strong>
+                                Pintura
+                            </strong>
+
+                            <span class="badge">
+                                Não iniciada
+                            </span>
+
+                        </div>
+
+                        <small>
+                            Previsão: 20/11/2026
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <br>
+
+                <h3 style="margin-bottom: 12px;">
+                    Nova etapa
+                </h3>
+
+                <form id="formEtapa">
+
+                    <div class="form-group">
+
+                        <label>
+                            Nome da etapa
+                        </label>
+
+                        <input
+                            type="text"
+                            id="nomeEtapa"
+                            placeholder="Ex.: Instalação hidráulica"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>
+                            Status
+                        </label>
+
+                        <select id="statusEtapa">
+
+                            <option>
+                                Não iniciada
+                            </option>
+
+                            <option>
+                                Em andamento
+                            </option>
+
+                            <option>
+                                Concluída
+                            </option>
+
+                            <option>
+                                Atrasada
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>
+                            Data prevista
+                        </label>
+
+                        <input
+                            type="date"
+                            id="dataEtapa"
+                            required
+                        >
+
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="btn-principal">
+
+                        Adicionar etapa
+
+                    </button>
+
+                </form>
+
+            </section>
+
+
+            <!-- =================================================
+                 CONTROLE DE MATERIAIS
+                 ================================================= -->
+
+            <section class="section">
+
+                <h2>Controle de materiais</h2>
+
+                <div id="listaMateriais">
+
+                    <div class="material">
+
+                        <div class="material-info">
+
+                            <strong>
+                                Cimento
+                            </strong>
+
+                            <small>
+                                20 sacos
+                            </small>
+
+                        </div>
+
+                        <span class="material-status">
+                            Disponível
+                        </span>
+
+                    </div>
+
+
+                    <div class="material">
+
+                        <div class="material-info">
+
+                            <strong>
+                                Tinta branca
+                            </strong>
+
+                            <small>
+                                10 litros
+                            </small>
+
+                        </div>
+
+                        <span class="material-status">
+                            Comprar
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <br>
+
+                <h3 style="margin-bottom: 12px;">
+                    Novo material
+                </h3>
+
+                <form id="formMaterial">
+
+                    <div class="form-group">
+
+                        <label>
+                            Material
+                        </label>
+
+                        <input
+                            type="text"
+                            id="nomeMaterial"
+                            placeholder="Ex.: Piso cerâmico"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+
+                            <label>
+                                Quantidade
+                            </label>
+
+                            <input
+                                type="number"
+                                id="quantidadeMaterial"
+                                required
+                            >
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>
+                                Unidade
+                            </label>
+
+                            <input
+                                type="text"
+                                id="unidadeMaterial"
+                                placeholder="m², kg, sacos..."
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>
+                            Status
+                        </label>
+
+                        <select id="statusMaterial">
+
+                            <option>
+                                Disponível
+                            </option>
+
+                            <option>
+                                Comprar
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="btn-principal">
+
+                        Adicionar material
+
+                    </button>
+
+                </form>
+
+            </section>
+
+
+            <!-- =================================================
+                 ATUALIZAÇÃO DA OBRA
+                 ================================================= -->
+
+            <section class="section">
+
+                <h2>Nova atualização</h2>
+
+                <form id="formAtualizacaoObra">
+
+                    <div class="form-group">
+
+                        <label>
+                            Título
+                        </label>
+
+                        <input
+                            type="text"
+                            id="tituloAtualizacao"
+                            placeholder="Ex.: Instalação elétrica"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>
+                            Descrição
+                        </label>
+
+                        <textarea
+                            id="descricaoAtualizacao"
+                            placeholder="Descreva o que foi realizado..."
+                            required>
+                        </textarea>
+
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="btn-principal">
+
+                        Registrar atualização
+
+                    </button>
+
+                </form>
+
+            </section>
+
+        </div>
+
+
+        <!-- =====================================================
+             ÁREA DO CLIENTE
+             ===================================================== -->
+
+        <div id="areaCliente"
+             class="somente-cliente">
+
+            <section class="section">
+
+                <h2>Acompanhamento da obra</h2>
+
+                <p style="line-height: 1.5; color: #555;">
+                    Aqui você pode acompanhar o andamento
+                    da sua obra, suas etapas, materiais
+                    e últimas atualizações.
+                </p>
+
+            </section>
+
+        </div>
+
+
+        <!-- =====================================================
+             ETAPAS VISÍVEIS PARA O CLIENTE
+             ===================================================== -->
+
+        <section class="section">
+
+            <h2>Etapas da obra</h2>
+
+            <div id="listaEtapasCliente"></div>
+
+        </section>
+
+
+        <!-- =====================================================
+             MATERIAIS
+             ===================================================== -->
+
+        <section class="section">
+
+            <h2>Materiais</h2>
+
+            <div id="listaMateriaisCliente"></div>
+
+        </section>
+
+
+        <!-- =====================================================
+             ATUALIZAÇÕES
+             ===================================================== -->
+
+        <section class="section">
+
+            <h2>Últimas atualizações</h2>
+
+            <div id="listaAtualizacoes">
+
+                <div class="atualizacao">
+
+                    <strong>
+                        Instalação elétrica
+                    </strong>
+
+                    <small>
+                        10/11/2026
+                    </small>
+
+                    <p>
+                        Foi concluída a instalação dos
+                        pontos de iluminação dos quartos.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             EXPORTAÇÃO DO RELATÓRIO
+             ===================================================== -->
+
+        <section class="section">
+
+            <h2>Relatório da obra</h2>
+
+            <p style="color:#666; font-size:14px; margin-bottom:10px;">
+                Exporte as informações da obra para
+                compartilhar ou abrir no Excel.
+            </p>
+
+            <button
+                class="btn-exportar"
+                onclick="exportarRelatorio()">
+
+                Exportar Relatório (CSV)
+
+            </button>
+
+        </section>
+
+    </main>
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+         ===================================================== -->
+
+    <script>
+
+
+        /* =====================================================
+           DADOS INICIAIS
+           ===================================================== */
+
+        let etapas =
+            JSON.parse(
+                localStorage.getItem("etapasObra")
+            ) || [];
+
+        let materiais =
+            JSON.parse(
+                localStorage.getItem("materiaisObra")
+            ) || [];
+
+        let atualizacoes =
+            JSON.parse(
+                localStorage.getItem("atualizacoesObra")
+            ) || [];
+
+
+        /* =====================================================
+           PERFIL DO USUÁRIO
+           ===================================================== */
+
+        function mostrarFuncionario() {
+
+            document.getElementById(
+                "areaFuncionario"
+            ).style.display = "block";
+
+            document.getElementById(
+                "areaCliente"
+            ).style.display = "none";
+
+            document.getElementById(
+                "btnFuncionario"
+            ).classList.add("ativo");
+
+            document.getElementById(
+                "btnCliente"
+            ).classList.remove("ativo");
+        }
+
+
+        function mostrarCliente() {
+
+            document.getElementById(
+                "areaFuncionario"
+            ).style.display = "none";
+
+            document.getElementById(
+                "areaCliente"
+            ).style.display = "block";
+
+            document.getElementById(
+                "btnFuncionario"
+            ).classList.remove("ativo");
+
+            document.getElementById(
+                "btnCliente"
+            ).classList.add("ativo");
+        }
+
+
+        /* =====================================================
+           SALVAR DADOS
+           ===================================================== */
+
+        function salvarDados() {
+
+            localStorage.setItem(
+                "etapasObra",
+                JSON.stringify(etapas)
+            );
+
+            localStorage.setItem(
+                "materiaisObra",
+                JSON.stringify(materiais)
+            );
+
+            localStorage.setItem(
+                "atualizacoesObra",
+                JSON.stringify(atualizacoes)
+            );
+        }
+
+
+        /* =====================================================
+           ATUALIZAR PROGRESSO DA OBRA
+           ===================================================== */
+
+        document.getElementById(
+            "formAtualizacao"
+        ).addEventListener(
+            "submit",
+            function(evento) {
+
+                evento.preventDefault();
+
+                const progresso =
+                    Number(
+                        document.getElementById(
+                            "progressoInput"
+                        ).value
+                    );
+
+                const status =
+                    document.getElementById(
+                        "statusInput"
+                    ).value;
+
+
+                document.getElementById(
+                    "porcentagem"
+                ).textContent =
+                    progresso + "%";
+
+
+                document.getElementById(
+                    "barraProgresso"
+                ).style.width =
+                    progresso + "%";
+
+
+                document.getElementById(
+                    "statusObra"
+                ).textContent =
+                    status;
+
+
+                alert(
+                    "Informações da obra atualizadas!"
+                );
+            }
+        );
+
+
+        /* =====================================================
+           ADICIONAR ETAPA
+           ===================================================== */
+
+        document.getElementById(
+            "formEtapa"
+        ).addEventListener(
+            "submit",
+            function(evento) {
+
+                evento.preventDefault();
+
+                const etapa = {
+
+                    id: Date.now(),
+
+                    nome:
+                        document.getElementById(
+                            "nomeEtapa"
+                        ).value,
+
+                    status:
+                        document.getElementById(
+                            "statusEtapa"
+                        ).value,
+
+                    data:
+                        document.getElementById(
+                            "dataEtapa"
+                        ).value
+                };
+
+
+                etapas.push(etapa);
+
+                salvarDados();
+
+                exibirEtapas();
+
+                evento.target.reset();
+
+                alert(
+                    "Etapa adicionada com sucesso!"
+                );
+            }
+        );
+
+
+        /* =====================================================
+           EXIBIR ETAPAS
+           ===================================================== */
+
+        function exibirEtapas() {
+
+            const listaFuncionario =
+                document.getElementById(
+                    "listaEtapas"
+                );
+
+            const listaCliente =
+                document.getElementById(
+                    "listaEtapasCliente"
+                );
+
+
+            listaFuncionario.innerHTML = "";
+
+            listaCliente.innerHTML = "";
+
+
+            etapas.forEach(function(etapa) {
+
+                let classe = "";
+
+                if (etapa.status === "Concluída") {
+                    classe = "concluida";
+                }
+
+                if (etapa.status === "Em andamento") {
+                    classe = "andamento";
+                }
+
+                if (etapa.status === "Atrasada") {
+                    classe = "atrasada";
+                }
+
+
+                const html = `
+
+                    <div class="etapa">
+
+                        <div class="etapa-topo">
+
+                            <strong>
+                                ${etapa.nome}
+                            </strong>
+
+                            <span class="badge ${classe}">
+                                ${etapa.status}
+                            </span>
+
+                        </div>
+
+                        <small>
+                            Previsão:
+                            ${formatarData(etapa.data)}
+                        </small>
+
+                    </div>
+                `;
+
+
+                listaFuncionario.innerHTML += html;
+
+                listaCliente.innerHTML += html;
+
+            });
+        }
+
+
+        /* =====================================================
+           ADICIONAR MATERIAL
+           ===================================================== */
+
+        document.getElementById(
+            "formMaterial"
+        ).addEventListener(
+            "submit",
+            function(evento) {
+
+                evento.preventDefault();
+
+                const material = {
+
+                    id: Date.now(),
+
+                    nome:
+                        document.getElementById(
+                            "nomeMaterial"
+                        ).value,
+
+                    quantidade:
+                        document.getElementById(
+                            "quantidadeMaterial"
+                        ).value,
+
+                    unidade:
+                        document.getElementById(
+                            "unidadeMaterial"
+                        ).value,
+
+                    status:
+                        document.getElementById(
+                            "statusMaterial"
+                        ).value
+                };
+
+
+                materiais.push(material);
+
+                salvarDados();
+
+                exibirMateriais();
+
+                evento.target.reset();
+
+                alert(
+                    "Material adicionado com sucesso!"
+                );
+            }
+        );
+
+
+        /* =====================================================
+           EXIBIR MATERIAIS
+           ===================================================== */
+
+        function exibirMateriais() {
+
+            const lista =
+                document.getElementById(
+                    "listaMateriais"
+                );
+
+            const listaCliente =
+                document.getElementById(
+                    "listaMateriaisCliente"
+                );
+
+
+            lista.innerHTML = "";
+
+            listaCliente.innerHTML = "";
+
+
+            materiais.forEach(function(material) {
+
+                const html = `
+
+                    <div class="material">
+
+                        <div class="material-info">
+
+                            <strong>
+                                ${material.nome}
+                            </strong>
+
+                            <small>
+                                ${material.quantidade}
+                                ${material.unidade}
+                            </small>
+
+                        </div>
+
+                        <span class="material-status">
+                            ${material.status}
+                        </span>
+
+                    </div>
+
+                `;
+
+
+                lista.innerHTML += html;
+
+                listaCliente.innerHTML += html;
+
+            });
+        }
+
+
+        /* =====================================================
+           ADICIONAR ATUALIZAÇÃO
+           ===================================================== */
+
+        document.getElementById(
+            "formAtualizacaoObra"
+        ).addEventListener(
+            "submit",
+            function(evento) {
+
+                evento.preventDefault();
+
+
+                const hoje =
+                    new Date();
+
+
+                const data =
+                    hoje.toLocaleDateString(
+                        "pt-BR"
+                    );
+
+
+                const atualizacao = {
+
+                    id: Date.now(),
+
+                    titulo:
+                        document.getElementById(
+                            "tituloAtualizacao"
+                        ).value,
+
+                    descricao:
+                        document.getElementById(
+                            "descricaoAtualizacao"
+                        ).value,
+
+                    data: data
+                };
+
+
+                atualizacoes.unshift(
+                    atualizacao
+                );
+
+
+                salvarDados();
+
+                exibirAtualizacoes();
+
+                evento.target.reset();
+
+                alert(
+                    "Atualização registrada!"
+                );
+            }
+        );
+
+
+        /* =====================================================
+           EXIBIR ATUALIZAÇÕES
+           ===================================================== */
+
+        function exibirAtualizacoes() {
+
+            const lista =
+                document.getElementById(
+                    "listaAtualizacoes"
+                );
+
+
+            lista.innerHTML = "";
+
+
+            atualizacoes.forEach(
+                function(atualizacao) {
+
+                    lista.innerHTML += `
+
+                        <div class="atualizacao">
+
+                            <strong>
+                                ${atualizacao.titulo}
+                            </strong>
+
+                            <small>
+                                ${atualizacao.data}
+                            </small>
+
+                            <p>
+                                ${atualizacao.descricao}
+                            </p>
+
+                        </div>
+
+                    `;
+
+                }
+            );
+        }
+
+
+        /* =====================================================
+           FORMATAÇÃO DE DATA
+           ===================================================== */
+
+        function formatarData(data) {
+
+            if (!data) {
+                return "";
+            }
+
+            const partes =
+                data.split("-");
+
+
+            if (partes.length !== 3) {
+                return data;
+            }
+
+
+            return (
+                partes[2] +
+                "/" +
+                partes[1] +
+                "/" +
+                partes[0]
+            );
+        }
+
+
+        /* =====================================================
+           EXPORTAR RELATÓRIO CSV
+           ===================================================== */
+
+        function exportarRelatorio() {
+
+            let csv =
+                "RELATORIO DA OBRA\n\n";
+
+
+            csv +=
+                "OBRA;Reforma Residencial\n";
+
+            csv +=
+                "STATUS;" +
+                document.getElementById(
+                    "statusObra"
+                ).textContent +
+                "\n";
+
+            csv +=
+                "PROGRESSO;" +
+                document.getElementById(
+                    "porcentagem"
+                ).textContent +
+                "\n\n";
+
+
+            /* -----------------------------
+               ETAPAS
+               ----------------------------- */
+
+            csv +=
+                "ETAPAS\n";
+
+            csv +=
+                "Nome;Status;Data prevista\n";
+
+
+            etapas.forEach(function(etapa) {
+
+                csv +=
+                    `"${etapa.nome}";` +
+                    `"${etapa.status}";` +
+                    `"${formatarData(etapa.data)}"\n`;
+
+            });
+
+
+            csv += "\n";
+
+
+            /* -----------------------------
+               MATERIAIS
+               ----------------------------- */
+
+            csv +=
+                "MATERIAIS\n";
+
+            csv +=
+                "Material;Quantidade;Unidade;Status\n";
+
+
+            materiais.forEach(function(material) {
+
+                csv +=
+                    `"${material.nome}";` +
+                    `"${material.quantidade}";` +
+                    `"${material.unidade}";` +
+                    `"${material.status}"\n`;
+
+            });
+
+
+            csv += "\n";
+
+
+            /* -----------------------------
+               ATUALIZAÇÕES
+               ----------------------------- */
+
+            csv +=
+                "ATUALIZACOES\n";
+
+            csv +=
+                "Data;Titulo;Descricao\n";
+
+
+            atualizacoes.forEach(
+                function(atualizacao) {
+
+                    csv +=
+                        `"${atualizacao.data}";` +
+                        `"${atualizacao.titulo}";` +
+                        `"${atualizacao.descricao}"\n`;
+
+                }
+            );
+
+
+            /* -----------------------------
+               DOWNLOAD
+               ----------------------------- */
+
+            const BOM =
+                "\uFEFF";
+
+
+            const arquivo =
+                new Blob(
+                    [BOM + csv],
+                    {
+                        type:
+                            "text/csv;charset=utf-8;"
+                    }
+                );
+
+
+            const url =
+                URL.createObjectURL(
+                    arquivo
+                );
+
+
+            const link =
+                document.createElement(
+                    "a"
+                );
+
+
+            link.href = url;
+
+            link.download =
+                "relatorio_obra.csv";
+
+
+            document.body.appendChild(
+                link
+            );
+
+            link.click();
+
+            document.body.removeChild(
+                link
+            );
+
+
+            URL.revokeObjectURL(
+                url
+            );
+        }
+
+
+        /* =====================================================
+           INICIALIZAÇÃO
+           ===================================================== */
+
+        exibirEtapas();
+
+        exibirMateriais();
+
+        exibirAtualizacoes();
+
+    </script>
+
+</body>
+
+</html>
